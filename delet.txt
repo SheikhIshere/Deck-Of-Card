@@ -1,0 +1,398 @@
+assume i have a list of pairs like this 
+x = [(a,b),(a,b),(a,b),(a,b),(a,b),(a,b),(a,b),(a,b),(a,b) ~~~ to be continue]
+len(x) = 52
+now i have 4 variable bot1, bot2, bot3, bot4
+
+first will get bot1
+second will get bot2
+third will get bot3
+fourth will get bot4
+then again bot1 and to be continue till all game the same card though all will get equal
+
+how to do that
+
+
+
+
+
+// promt 2
+
+help me to fix this problem 
+
+in terminal i am seeing this 
+imran-rafi@imran-rafi-ASUS-TUF-Gaming-A15-FA507NVR-FA507NVR:~/Desktop/test/assignment_bd_calling/deck of card/test2$ /bin/python3 "/home/imran-rafi/Desktop/test/assignment_bd_calling/deck of card/test/test3.py"
+Traceback (most recent call last):
+  File "/home/imran-rafi/Desktop/test/assignment_bd_calling/deck of card/test/test3.py", line 139, in <module>
+    bot1 = Bot1Logic()
+           ^^^^^^^^^^^
+  File "/home/imran-rafi/Desktop/test/assignment_bd_calling/deck of card/test/test3.py", line 103, in __init__
+    self.on_hand_cards = self.bot_1()
+                         ^^^^^^^^^^^^
+  File "/home/imran-rafi/Desktop/test/assignment_bd_calling/deck of card/test/test3.py", line 61, in bot_1
+    return self.bot1_cards
+           ^^^^^^^^^^^^^^^
+AttributeError: 'Bot1Logic' object has no attribute 'bot1_cards'. Did you mean: 'sort_cards'?
+
+here is my code:
+import random
+from card_pair_to_emoji import card_pair_to_emoji as cte
+
+# Example usage
+# print(cte(('s','a'), ('h','10'), ('d','q'), ('c','5')))
+# Output: ['🂡', '🂺', '🃍', '🃕']
+
+
+class Deck:
+    def __init__(self):
+        suits = ['s', 'h', 'd', 'c']
+        ranks = ['a', 'k', 'q', 'j', '10', '9', '8', '7', '6', '5', '4', '3', '2']
+        self.all_cards = [(s, r) for s in suits for r in ranks]
+        self.all_spread = []  # cards currently on the table
+
+        self.bot1_cards = []
+        self.bot2_cards = [] 
+        self.bot3_cards = []
+        self.player_cards = []
+        
+    def show_cards(self):        
+        return self.all_cards
+
+    def show_spread(self):
+        return self.all_spread
+    
+    def card_shuffle(self):
+        shuffled_card = self.all_cards.copy()
+        random.shuffle(shuffled_card)
+        return shuffled_card
+
+    def card_splitter(self):
+        shuffled_card = self.card_shuffle()
+        
+        # Split the cards
+        self.bot1_cards = shuffled_card[0::4]
+        self.bot2_cards = shuffled_card[1::4]
+        self.bot3_cards = shuffled_card[2::4]
+        self.player_cards = shuffled_card[3::4]
+
+        # Sort each player's cards (weakest to strongest)
+        self.bot1_cards = self.sort_cards(self.bot1_cards)
+        self.bot2_cards = self.sort_cards(self.bot2_cards)
+        self.bot3_cards = self.sort_cards(self.bot3_cards)
+        self.player_cards = self.sort_cards(self.player_cards)
+
+        return self.bot1_cards, self.bot2_cards, self.bot3_cards, self.player_cards
+    
+    def sort_cards(self, cards):
+        # Define suit order (you can modify this if you want different suit ordering)
+        suit_order = {'s': 0, 'h': 1, 'd': 2, 'c': 3}
+        
+        # Define rank order from WEAKEST to STRONGEST
+        rank_order = {'2': 0, '3': 1, '4': 2, '5': 3, '6': 4, '7': 5, '8': 6, 
+                     '9': 7, '10': 8, 'j': 9, 'q': 10, 'k': 11, 'a': 12}
+        
+        # Sort by suit first, then by rank (weakest to strongest)
+        return sorted(cards, key=lambda card: (suit_order[card[0]], rank_order[card[1]]))
+    
+    def bot_1(self):
+        return self.bot1_cards
+    
+    def bot_2(self):
+        return self.bot2_cards
+
+    def bot_3(self):
+        return self.bot3_cards
+
+    def player(self):
+        return self.player_cards
+
+# Test the organized deck (weakest to strongest)
+# d = Deck()
+# d.card_splitter()
+
+# print("\n-----------Organized cards for bot 1 (Weakest to Strongest)-----------\n")
+# print(d.bot_1())
+# print("\n-----------Organized cards for bot 2 (Weakest to Strongest)-----------\n")
+# print(d.bot_2())
+# print("\n-----------Organized cards for bot 3 (Weakest to Strongest)-----------\n")
+# print(d.bot_3())
+# print("\n-----------Organized cards for player (Weakest to Strongest)-----------\n")
+# print(d.player())
+
+
+
+
+# now it's time to provide cards to the players, 
+
+# kjc
+class PlayerLogic:
+    
+    def __init__(self, username = '', on_hand_cards = [], total_win = 0):
+        self.username = username
+        self.on_hand_cards = on_hand_cards
+        self.total_win = total_win 
+
+
+
+class Bot1Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        super().__init__(username, on_hand_cards, total_win)
+        self.on_hand_cards = self.bot_1()
+        self.username = "bot1"
+
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+
+class Bot2Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        super().__init__(username, on_hand_cards, total_win)
+        self.on_hand_cards = self.bot_2()
+        self.username = "bot2"
+    
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+
+class Bot3Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        super().__init__(username, on_hand_cards, total_win)
+        self.on_hand_cards = self.bot_3()
+        self.username = "bot3"
+
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+    
+
+    
+class UserPlayerLogic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        super().__init__(username, on_hand_cards, total_win)        
+        self.on_hand_cards = self.player()
+        self.username = "user"
+
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+
+
+bot1 = Bot1Logic()
+bot2 = Bot2Logic()
+bot3 = Bot3Logic()
+user = UserPlayerLogic()
+
+print("\n-----------Organized cards for bot 1 (Weakest to Strongest)-----------\n")
+print(bot1.show_card_emoji())
+print("\n-----------Organized cards for bot 2 (Weakest to Strongest)-----------\n")
+print(bot2.show_card_emoji())
+print("\n-----------Organized cards for bot 3 (Weakest to Strongest)-----------\n")
+print(bot3.show_card_emoji())
+print("\n-----------Organized cards for player (Weakest to Strongest)-----------\n")
+print(user.show_card_emoji())
+
+
+
+
+
+// promt 3
+
+check this this code is not suppose to gime any output, why it's giving me out push_into_board_card
+
+file: reduced_complexity/deck_logic.py
+
+import random
+from card_pair_to_emoji import card_pair_to_emoji as cte
+
+class Deck:
+    def __init__(self):
+        suits = ['s', 'h', 'd', 'c']
+        ranks = ['a', 'k', 'q', 'j', '10', '9', '8', '7', '6', '5', '4', '3', '2']
+        self.all_cards = [(s, r) for s in suits for r in ranks]
+        self.all_spread = []  # cards currently on the table
+
+        self.bot1_cards   = []
+        self.bot2_cards   = [] 
+        self.bot3_cards   = []
+        self.player_cards = []
+        
+    def show_cards(self):        
+        return self.all_cards
+
+    def show_spread(self):
+        return self.all_spread
+    
+    def card_shuffle(self):
+        shuffled_card = self.all_cards.copy()
+        random.shuffle(shuffled_card)
+        return shuffled_card
+
+    def card_splitter(self):
+        shuffled_card = self.card_shuffle()
+        
+        # Split the cards
+        self.bot1_cards = shuffled_card[0::4]
+        self.bot2_cards = shuffled_card[1::4]
+        self.bot3_cards = shuffled_card[2::4]
+        self.player_cards = shuffled_card[3::4]
+
+        # Sort each player's cards (weakest to strongest)
+        self.bot1_cards = self.sort_cards(self.bot1_cards)
+        self.bot2_cards = self.sort_cards(self.bot2_cards)
+        self.bot3_cards = self.sort_cards(self.bot3_cards)
+        self.player_cards = self.sort_cards(self.player_cards)
+
+        return self.bot1_cards, self.bot2_cards, self.bot3_cards, self.player_cards
+    
+    def sort_cards(self, cards):
+        # Define suit order (you can modify this if you want different suit ordering)
+        suit_order = {'s': 0, 'h': 1, 'd': 2, 'c': 3}
+        
+        # Define rank order from WEAKEST to STRONGEST
+        rank_order = {'2': 0, '3': 1, '4': 2, '5': 3, '6': 4, '7': 5, '8': 6, 
+                     '9': 7, '10': 8, 'j': 9, 'q': 10, 'k': 11, 'a': 12}
+        
+        # Sort by suit first, then by rank (weakest to strongest)
+        return sorted(cards, key=lambda card: (suit_order[card[0]], rank_order[card[1]]))
+    
+    def bot_1(self):
+        return self.bot1_cards
+    
+    def bot_2(self):
+        return self.bot2_cards
+
+    def bot_3(self):
+        return self.bot3_cards
+
+    def player(self):
+        return self.player_cards
+
+
+
+file: reduced_complexity/player_logic.py
+
+from deck_logic import Deck
+from card_pair_to_emoji import card_pair_to_emoji as cte
+
+class PlayerLogic:    
+    def __init__(self, username = '', on_hand_cards = [], total_win = 0):
+        self.username = username
+        self.on_hand_cards = on_hand_cards
+        self.total_win = total_win 
+
+class Bot1Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        # Initialize the Deck parent first
+        Deck.__init__(self)
+        # Split the cards
+        self.card_splitter()
+        # Now initialize PlayerLogic with the cards
+        PlayerLogic.__init__(self, username, self.bot_1(), total_win)
+        self.username = "bot1"
+    
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+    
+    def show_info(self):
+        return f"Username: {self.username}, On Hand Cards: {self.on_hand_cards}, Total Win: {self.total_win}"
+
+class Bot2Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        # Initialize the Deck parent first
+        Deck.__init__(self)
+        # Split the cards
+        self.card_splitter()
+        # Now initialize PlayerLogic with the cards
+        PlayerLogic.__init__(self, username, self.bot_2(), total_win)
+        self.username = "bot2"
+    
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+    
+    def show_info(self):
+        return f"Username: {self.username}, On Hand Cards: {self.on_hand_cards}, Total Win: {self.total_win}"
+
+class Bot3Logic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        # Initialize the Deck parent first
+        Deck.__init__(self)
+        # Split the cards
+        self.card_splitter()
+        # Now initialize PlayerLogic with the cards
+        PlayerLogic.__init__(self, username, self.bot_3(), total_win)
+        self.username = "bot3"
+
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+    
+    def show_info(self):
+        return f"Username: {self.username}, On Hand Cards: {self.on_hand_cards}, Total Win: {self.total_win}"
+
+class UserPlayerLogic(PlayerLogic, Deck):
+    def __init__(self, username = "", on_hand_cards = [], total_win = 0):
+        # Initialize the Deck parent first
+        Deck.__init__(self)
+        # Split the cards
+        self.card_splitter()
+        # Now initialize PlayerLogic with the cards
+        PlayerLogic.__init__(self, username, self.player(), total_win)
+        self.username = "user"
+
+    def show_card_emoji(self):
+        return cte(*self.on_hand_cards)
+    
+    def show_info(self):
+        return f"Username: {self.username}, On Hand Cards: {self.on_hand_cards}, Total Win: {self.total_win}"
+
+# Create instances
+bot1 = Bot1Logic()
+bot2 = Bot2Logic()
+bot3 = Bot3Logic()
+user = UserPlayerLogic()
+
+# print("\n-----------Organized cards for bot 1 (Weakest to Strongest)-----------\n")
+# print("Raw cards:", bot1.on_hand_cards)
+# print("Emojis:", bot1.show_card_emoji())
+# print("Info:", bot1.show_info())
+
+# print("\n-----------Organized cards for bot 2 (Weakest to Strongest)-----------\n")
+# print("Raw cards:", bot2.on_hand_cards)
+# print("Emojis:", bot2.show_card_emoji())
+# print("Info:", bot2.show_info())
+
+# print("\n-----------Organized cards for bot 3 (Weakest to Strongest)-----------\n")
+# print("Raw cards:", bot3.on_hand_cards)
+# print("Emojis:", bot3.show_card_emoji())
+# print("Info:", bot3.show_info())
+
+# print("\n-----------Organized cards for player (Weakest to Strongest)-----------\n")
+# print("Raw cards:", user.on_hand_cards)
+# print("Emojis:", user.show_card_emoji())
+# print("Info:", user.show_info())
+
+
+file: reduced_complexity/card_pair_to_emoji.py
+
+def card_pair_to_emoji(*args):
+    """
+    Convert one or more card tuples (suit, rank) to their emoji.
+    Each card: (suit, rank) where suit in 's', 'h', 'd', 'c' and rank in 'a','2'...'k'
+    """
+    suit_map = {'s': 0x1F0A1, 'h': 0x1F0B1, 'd': 0x1F0C1, 'c': 0x1F0D1}
+    rank_order = ['a','2','3','4','5','6','7','8','9','10','j','q','k']
+
+    emojis = []
+    for card in args:
+        suit, rank = card
+        index = rank_order.index(rank.lower())
+        code_point = suit_map[suit.lower()] + index
+        emojis.append(chr(code_point))
+    return emojis
+
+
+
+
+
+// promt 4
+
+check this code , i am making a card game know as 
+deck of card, i am unable to place actual logic if 
+you could gime a overview of the game and how to 
+place the logic in it of this code
+i  have given you some files and check them to make 
+and gimme the logic of the game overview

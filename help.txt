@@ -1,0 +1,158 @@
+https://lucid.app/lucidchart/9330dec5-293b-4b09-9213-3d94f5e6644b/edit?viewport_loc=-7%2C-1071%2C2434%2C2688%2C0_0&invitationId=inv_d5799e14-05bb-4222-bde6-49007cdf28ef
+
+🂡 Ace of Spades
+🂢 2 of Spades
+🂣 3 of Spades
+🂤 4 of Spades
+🂥 5 of Spades
+🂦 6 of Spades
+🂧 7 of Spades
+🂨 8 of Spades
+🂩 9 of Spades
+🂪 10 of Spades
+🂫 Jack of Spades
+🂭 Queen of Spades
+🂮 King of Spades
+🂱 Ace of Hearts
+🂲 2 of Hearts
+🂳 3 of Hearts
+🂴 4 of Hearts
+🂵 5 of Hearts
+🂶 6 of Hearts
+🂷 7 of Hearts
+🂸 8 of Hearts
+🂹 9 of Hearts
+🂺 10 of Hearts
+🂻 Jack of Hearts
+🂽 Queen of Hearts
+🂾 King of Hearts
+🃁 Ace of Diamonds
+🃂 2 of Diamonds
+🃃 3 of Diamonds
+🃄 4 of Diamonds
+🃅 5 of Diamonds
+🃆 6 of Diamonds
+🃇 7 of Diamonds
+🃈 8 of Diamonds
+🃉 9 of Diamonds
+🃊 10 of Diamonds
+🃋 Jack of Diamonds
+🃍 Queen of Diamonds
+🃎 King of Diamonds
+🃑 Ace of Clubs
+🃒 2 of Clubs
+🃓 3 of Clubs
+🃔 4 of Clubs
+🃕 5 of Clubs
+🃖 6 of Clubs
+🃗 7 of Clubs
+🃘 8 of Clubs
+🃙 9 of Clubs
+🃚 10 of Clubs
+🃛 Jack of Clubs
+🃝 Queen of Clubs
+🃞 King of Clubs
+
+
+
+game rules
+
+
+-----------------
+game logic theory
+-----------------
+
+-----------------
+place card logic
+-----------------
+
+global variable:
+    first_played_card = board_card[0]
+    spread_card = [all spread_card]
+    board_card = []
+
+
+first move:
+------------
+first i will play with my first move without 
+the spread_card
+
+if broken_spread_card_rule:
+    place highest_card from (bot_hand_card in spread_card)
+    then:
+        push_into_board_card()
+        pop_that_placed_card() from bot_hand_card
+else:
+    place any card without higher ranking card from
+    bot_hand_card then:
+        push_into_board_card()
+        pop_that_placed_card() from bot_hand_card
+
+
+-----------
+bot move:
+-----------
+bot move will be from bot 2-3:
+    if first_played_card in bot_hand_card:
+        if in board_card < bot_hand_card :
+            play the little minimum higher card 
+            from board card then:
+                push_into_board_card()
+                pop_that_placed_card() from bot_hand_card
+
+        else:
+            place lowest valued spread_card on board_card
+            or place same lowest valued bot_hand_card 
+            on board_card then: 
+                push_into_board_card()
+                pop_that_placed_card() from bot_hand_card
+
+    elif spread_card in board_card :                             
+        find all spread_card and check
+        from the board for
+        any cards bot have 
+        is higher minimum
+        higher valued card then 
+        all
+        
+    else :
+        place lowest valued card then:
+            push_into_board_card()
+            pop_that_placed_card() from bot_hand_card
+
+-----------
+Player move:
+-----------
+bot_hand_card = [cards]
+Player will chose index+1 of card and hit enter
+and then
+    push_into_board_card()
+    pop_that_placed_card() from bot_hand_card
+
+-------------------
+WINNING game logic
+-------------------
+
+if greater then all win++
+
+most win who got he will win
+
+
+
+
+1. Shuffle the deck and deal out 13 cards to each player.
+2. Determine the starting player by random selection.
+3. The starting player plays the first card face up.
+4. Each player plays one card in turn, starting with the next player.
+5. After all cards are played, compare the values of the cards to determine the highest.
+6. If multiple cards tie, resolve by suit order (Spades > Hearts > Diamonds > Clubs).
+7. The player with the highest-ranking card wins the trick and scores a point.
+8. The player who won the trick becomes the new starting player for the next round.
+9. Repeat steps 3-8 for all 13 rounds.
+10. Count the total points for each player.
+11. The player with the most points is the winner.
+12. If two or more players share the highest score, the game ends in a draw.
+13. Optional: display a leaderboard that includes the total stakes, rounds won, or player statistics.
+14. Optional bonus: award an extra point to the player who wins a trick using an Ace.
+15. Optional: keep a round summary (who played which card and who won each trick) for review/replay.
+16. Announce the winner, show the final statistics, and offer the option for a rematch or reset.
